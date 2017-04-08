@@ -11,7 +11,8 @@ const Twitter = new TwitterPackage({
 	access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 });
 const feed           = 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fcore.trac.wordpress.org%2Freport%2F44%3Fasc%3D1%26format%3Drss&api_key=' + process.env.RSS2JSON_KEY+'&count=200&order_by=pubDate';
-const alreadyTweeted = [];
+let alreadyTweeted = [];
+let preppedTweets  = [];
 const banter         = [
 	'Here\'s a good one!',
 	'Matt thinks you should fix this.',
@@ -28,6 +29,7 @@ const banter         = [
 	'Capital P Dangit!',
 ];
 const coreUrl 		 = 'https://core.trac.wordpress.org/ticket/';
+let isTweeting = false;
 
 function initGoodFirstBugsBot() {
 	"use strict";
@@ -37,6 +39,10 @@ function initGoodFirstBugsBot() {
 function TweetGoodFirstBugs()  {
 	"use strict";
 	let request  = require('request'); // for fetching the feed
+	console.log( 'Loading Feed ... ' );
+	console.log('**********************');
+	console.log( alreadyTweeted );
+	console.log('**********************');
 	request({
 		url: feed,
 		json: true
@@ -45,7 +51,6 @@ function TweetGoodFirstBugs()  {
 			let bugs           = body.items;
 			let arrayIndex     = 0;
 			let ticketsToTweet = {};
-			let preppedTweets  = [];
 
 			// Get a list of all the bugs.
 			bugs.forEach( function( i ) {
@@ -56,13 +61,12 @@ function TweetGoodFirstBugs()  {
 			for ( let index in ticketsToTweet ) {
 				let ticketNumber = ticketsToTweet[index];
 				if ( ! alreadyTweeted.includes( ticketNumber ) ) {
-					let message = banter[Math.floor(Math.random() * banter.length)]
+					let message = banter[Math.floor(Math.random() * banter.length)];
 					let tweet = message + ' ' + coreUrl + ticketNumber + ' #GoodFirstBug';
 					preppedTweets.push( tweet );
 					alreadyTweeted.push( ticketNumber );
 				}
 			}
-
 			/**
 			 * Delayed foreach function to not innundate twitter with tweets. No more 100 tweet dumps.
 			 * Shamelessly stolen from a much smarter person than I - https://github.com/magnificode/thecongressbot/blob/master/bot.js#L74
@@ -90,7 +94,6 @@ function TweetGoodFirstBugs()  {
 					console.log( 'There are ' + preppedTweets.length + ' tweets queued.' );
 					console.log('**********************');
 					const toTweet = array[0];
-
 					// If there's something to tweet.
 					if ( toTweet !== undefined ) {
 						Twitter.post('statuses/update', { status: toTweet }, function(err, data, response) {
@@ -106,17 +109,18 @@ function TweetGoodFirstBugs()  {
 					preppedTweets.splice( 0,1 );
 				}, 15*60*1000); //15 minutes
 			}
-			staggerTweet();
+			if ( false === isTweeting ) {
+				staggerTweet();
+				isTweeting = true;
+			}
+
 		} else {
-			console.log('error');
+			console.log( 'Feed request error:', error );
 		}
 	});
-
-	setInterval(TweetGoodFirstBugs, 1*60*60*1000);
 }
-
-
 /**
  * Start the show.
  */
 initGoodFirstBugsBot();
+setInterval(TweetGoodFirstBugs, 60*60*1000);
