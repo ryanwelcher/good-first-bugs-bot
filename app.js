@@ -10,6 +10,7 @@ const Twitter = new TwitterPackage({
 	access_token_key: process.env.TWITTER_ACCESS_TOKEN,
 	access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 });
+let isTweeting = false;
 const feed           = 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fcore.trac.wordpress.org%2Freport%2F44%3Fasc%3D1%26format%3Drss&api_key=' + process.env.RSS2JSON_KEY+'&count=200&order_by=pubDate';
 let alreadyTweeted = ['40363',
 	'40354',
@@ -110,7 +111,17 @@ let alreadyTweeted = ['40363',
 	'19272',
 	'18603',
 	'18035',
-	'17851',];
+	'17851',
+	'17262',
+	'17146',
+	'16979',
+	'15533',
+	'14981',
+	'14808',
+	'12684',
+	'9777',
+	'4969'
+];
 let preppedTweets  = [];
 const banter         = [
 	'Here\'s a good one!',
@@ -163,6 +174,8 @@ function TweetGoodFirstBugs()  {
 					alreadyTweeted.push( ticketNumber );
 				}
 			}
+
+			console.log( 'Prepped Tweets', preppedTweets );
 			/**
 			 * Delayed foreach function to not innundate twitter with tweets. No more 100 tweet dumps.
 			 * Shamelessly stolen from a much smarter person than I - https://github.com/magnificode/thecongressbot/blob/master/bot.js#L74
@@ -205,7 +218,11 @@ function TweetGoodFirstBugs()  {
 					preppedTweets.splice( 0,1 );
 				}, 15*60*1000); //15 minutes
 			}
-			staggerTweet();
+			if ( ! isTweeting ) {
+				console.log( 'Starting to tweet');
+				staggerTweet();
+				isTweeting = true;
+			}
 		} else {
 			console.log( 'Feed request error:', error );
 		}
