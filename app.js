@@ -11,7 +11,106 @@ const Twitter = new TwitterPackage({
 	access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 });
 const feed           = 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fcore.trac.wordpress.org%2Freport%2F44%3Fasc%3D1%26format%3Drss&api_key=' + process.env.RSS2JSON_KEY+'&count=200&order_by=pubDate';
-let alreadyTweeted = [];
+let alreadyTweeted = ['40363',
+	'40354',
+	'40353',
+	'40342',
+	'40286',
+	'40244',
+	'40188',
+	'40130',
+	'39970',
+	'39955',
+	'39922',
+	'39759',
+	'39671',
+	'39667',
+	'39633',
+	'39459',
+	'39419',
+	'39320',
+	'39213',
+	'38953',
+	'38918',
+	'38828',
+	'38686',
+	'38653',
+	'38369',
+	'38367',
+	'38310',
+	'38268',
+	'38258',
+	'38238',
+	'38197',
+	'38085',
+	'38073',
+	'38017',
+	'37873',
+	'37826',
+	'37799',
+	'37752',
+	'37595',
+	'37528',
+	'37451',
+	'37430',
+	'37422',
+	'37280',
+	'37013',
+	'37004',
+	'36905',
+	'36827',
+	'36346',
+	'36263',
+	'36259',
+	'36163',
+	'36159',
+	'36036',
+	'35778',
+	'35776',
+	'35567',
+	'35465',
+	'35188',
+	'35166',
+	'34881',
+	'34726',
+	'34413',
+	'33756',
+	'33591',
+	'33387',
+	'32939',
+	'32816',
+	'32544',
+	'32322',
+	'32228',
+	'31977',
+	'31779',
+	'31502',
+	'31029',
+	'30829',
+	'30439',
+	'30240',
+	'30154',
+	'29785',
+	'28956',
+	'28620',
+	'28569',
+	'28033',
+	'27888',
+	'27770',
+	'27671',
+	'26268',
+	'23749',
+	'22101',
+	'21941',
+	'20537',
+	'19826',
+	'19709',
+	'19556',
+	'19288',
+	'19272',
+	'18603',
+	'18035',
+	'17851',];
 let preppedTweets  = [];
 const banter         = [
 	'Here\'s a good one!',
@@ -29,7 +128,6 @@ const banter         = [
 	'Capital P Dangit!',
 ];
 const coreUrl 		 = 'https://core.trac.wordpress.org/ticket/';
-let isTweeting = false;
 
 function initGoodFirstBugsBot() {
 	"use strict";
@@ -40,8 +138,6 @@ function TweetGoodFirstBugs()  {
 	"use strict";
 	let request  = require('request'); // for fetching the feed
 	console.log( 'Loading Feed ... ' );
-	console.log('**********************');
-	console.log( alreadyTweeted );
 	console.log('**********************');
 	request({
 		url: feed,
@@ -109,11 +205,7 @@ function TweetGoodFirstBugs()  {
 					preppedTweets.splice( 0,1 );
 				}, 15*60*1000); //15 minutes
 			}
-			if ( false === isTweeting ) {
-				staggerTweet();
-				isTweeting = true;
-			}
-
+			staggerTweet();
 		} else {
 			console.log( 'Feed request error:', error );
 		}
