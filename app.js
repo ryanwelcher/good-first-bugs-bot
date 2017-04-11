@@ -15,6 +15,7 @@ const coreUrl      = 'https://core.trac.wordpress.org/ticket/';
 const feed         = 'https://core.trac.wordpress.org/query?status=accepted&status=assigned&status=new&status=reopened&status=reviewing&keywords=~good-first-bug+needs-patch&format=rss&order=id';
 let tweetsToSend   = {};
 let tweetsSent     = [];
+let firstRun       = true;
 
 
 function getTickets() {
@@ -32,6 +33,11 @@ function getTickets() {
 					};
 				}
 			});
+			if ( firstRun ) {
+				console.log( 'Auto tweeting on first run' );
+				sendATweet();
+				firstRun = false;
+			}
 			console.log( '************' );
 		});
 }
@@ -45,10 +51,11 @@ function sendATweet() {
 		if ( message.length > 140 ) {
 			message = ticketData.title.substring( 0, 75 ) + '... ' + ticketData.url + ' #GoodFirstBug';
 		}
+		console.log( 'Tweeted: ' + message );
 		Twitter.post('statuses/update', { status: message }, function(err, data, response ) {
 			if( toTweet ) {
-				console.log('Tweeted: ' + message );
-				console.log('**********************');
+				console.log( 'Tweeted: ' + message );
+				console.log( '**********************' );
 			}
 			if ( err ) {
 				console.log(err);
@@ -63,6 +70,5 @@ function sendATweet() {
 
 // Start the show!
 getTickets();
-sendATweet();
 setInterval( getTickets, 30*60*1000 );
 setInterval( sendATweet, 15*60*1000 );
