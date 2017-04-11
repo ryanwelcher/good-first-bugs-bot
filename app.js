@@ -53,7 +53,7 @@ function sendATweet() {
 		}
 		console.log( 'Tweeted: ' + message );
 		Twitter.post('statuses/update', { status: message }, function(err, data, response ) {
-			if( toTweet ) {
+			if( message ) {
 				console.log( 'Tweeted: ' + message );
 				console.log( '**********************' );
 			}
