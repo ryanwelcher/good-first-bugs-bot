@@ -2,8 +2,8 @@
  * Created by ryanwelcher on 2017-04-07.
  */
 require('dotenv').config();
-const rssUrlParser   = require("rss-url-parser");
-const TwitterPackage = require( 'twitter' );
+
+const TwitterPackage = require('twitter');
 
 const Twitter = new TwitterPackage({
 	consumer_key: process.env.TWITTER_CONSUMER_KEY,
@@ -11,45 +11,51 @@ const Twitter = new TwitterPackage({
 	access_token_key: process.env.TWITTER_ACCESS_TOKEN,
 	access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 });
-const coreUrl      = 'https://core.trac.wordpress.org/ticket/';
-const feed         = 'https://core.trac.wordpress.org/query?status=accepted&status=assigned&status=new&status=reopened&status=reviewing&keywords=~good-first-bug+needs-patch&format=rss&order=id';
 let tweetsToSend   = {};
-let tweetsSent     = [];
+let tweetsSent     = [ ];
 let firstRun       = true;
 
+const getGutenbergTickets  = require('./src/github');
+const getTracTickets = require('./src/trac');
 
-function getTickets() {
-	rssUrlParser(feed)
-		.then(function (data) {
-			data.forEach(function (item) {
-				let url    = item.link;
-				let ticket = url.replace(coreUrl, '');
-				let title  = item.title.replace('#' + ticket + ': ', '');
-				if (! tweetsToSend.hasOwnProperty(ticket) && ! tweetsSent.includes( ticket ) ) {
-					console.log( 'Adding ' + ticket + ' to queue' );
-					tweetsToSend[ticket] = {
-						'title': title,
-						'url': url,
-					};
-				}
-			});
-			if ( firstRun ) {
-				console.log( 'Auto tweeting on first run' );
-				sendATweet();
-				firstRun = false;
-			}
-			console.log( '************' );
-		});
+async function getTickets() {
+	const [ trac, gb ]  = await Promise.all([ getTracTickets(),getGutenbergTickets() ]);
+	const tickets = [
+		...trac,
+		...gb
+	]
+	tickets.forEach( ticket => {
+		const { issue, url, title, type} = ticket;
+		if (! tweetsToSend.hasOwnProperty(ticket) && ! tweetsSent.includes( ticket ) ) {
+			console.log( `Adding ${type}${issue} to queue`);
+			tweetsToSend[type+issue] = {
+				type,
+				issue,
+				title,
+				url,
+			};
+		}
+	});
+	if ( firstRun ) {
+		console.log( 'Auto tweeting on first run' );
+		sendATweet();
+		firstRun = false;
+	}
 }
 
+
+
+
 function sendATweet() {
-	if ( Object.keys( tweetsToSend ).length !== 0 ) {
+	const tweetKeys = Object.keys( tweetsToSend )
+	if ( tweetKeys.length !== 0 ) {
 		console.log('Sending a tweet');
-		let ticket = Object.keys(tweetsToSend)[0];
-		let ticketData = tweetsToSend[ticket];
-		let message = ticketData.title + ' ' + ticketData.url + ' #GoodFirstBug';
+		const index = tweetKeys[Math.floor(Math.random() * tweetKeys.length)];
+		const { issue, title, type, url } = tweetsToSend[index];
+		const hashtags = type === 'gb' ? '#GoodFirstBug #Gutenberg' : '#GoodFirstBug #WordPress';
+		let message = `#${issue}: ${title} ${url} ${hashtags}`;
 		if ( message.length > 140 ) {
-			message = ticketData.title.substring( 0, 75 ) + '... ' + ticketData.url + ' #GoodFirstBug';
+			message = `#${issue}: ${title.substring( 0, 75 )}... ${url} ${hashtags}`;
 		}
 		console.log( 'Tweeted: ' + message );
 		Twitter.post('statuses/update', { status: message }, function(err, data, response ) {
@@ -61,13 +67,11 @@ function sendATweet() {
 				console.log(err);
 			}
 		});
-		tweetsSent.push(ticket);
-		delete tweetsToSend[ticket];
+		tweetsSent.push(index);
+		delete tweetsToSend[index];
 		console.log('There are ' + Object.keys(tweetsToSend).length + ' tweets still in the queue');
 	}
 }
-
-
 // Start the show!
 getTickets();
 setInterval( getTickets, 30*60*1000 );
