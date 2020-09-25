@@ -17,7 +17,6 @@ const Twitter = new TwitterPackage({
 module.exports = function sendATweet(tweetsToSend) {
 	const tweetKeys = Object.keys(tweetsToSend);
 	if (tweetKeys.length !== 0) {
-		console.log('Sending a tweet');
 		const index = tweetKeys[Math.floor(Math.random() * tweetKeys.length)];
 		const { issue, title, type, url } = tweetsToSend[index];
 		const hashtags = type === 'gb' ? '#GoodFirstBug #Gutenberg' : '#GoodFirstBug #WordPress';
@@ -25,16 +24,20 @@ module.exports = function sendATweet(tweetsToSend) {
 		if (message.length > 140) {
 			message = `#${issue}: ${title.substring(0, 75)}... ${url} ${hashtags}`;
 		}
-		console.log(`Tweeted: ${message}`);
-		Twitter.post('statuses/update', { status: message }, function (err, data, response) {
-			if (message) {
-				console.log(`Tweeted: ${message}`);
-				console.log('**********************');
-			}
-			if (err) {
-				console.log(err);
-			}
-		});
+		if (process.env.NODE_ENV === 'production') {
+			Twitter.post('statuses/update', { status: message }, function (err) {
+				if (message) {
+					console.log(`Tweeted: ${message}`);
+					console.log('**********************');
+				}
+				if (err) {
+					console.log(err);
+				}
+			});
+		} else {
+			console.log(`Dev: Tweeted: ${message}`);
+		}
+
 		delete tweetsToSend[index];
 		console.log(`There are ${Object.keys(tweetsToSend).length} tweets still in the queue`);
 	}
