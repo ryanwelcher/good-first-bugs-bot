@@ -52,7 +52,6 @@ const { STARTING_TWEET } = process.env;
 			if (username !== 'ryanwelcher') {
 				const handle = `@${username}`;
 				const lowerCaseText = text.toLowerCase();
-				console.log(lowerCaseText);
 				if (lowerCaseText.includes('need a ticket')) {
 					// Pick a random tweet
 					const tweetKeys = Object.keys(tweetsToSend);
