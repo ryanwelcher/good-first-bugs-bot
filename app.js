@@ -46,7 +46,7 @@ const { STARTING_TWEET } = process.env;
 		mentions.forEach((mention) => {
 			const {
 				text,
-				id: replyToTweet,
+				id_str: replyToTweet,
 				user: { screen_name: username },
 			} = mention;
 			if (username !== 'ryanwelcher') {
