@@ -13,7 +13,7 @@ const getTracTickets = require('../src/trac');
 	const [trac, gb] = await Promise.all([getTracTickets(), getGutenbergTickets()]);
 	const tickets = [...trac, ...gb];
 	console.log(tickets);
-	fs.writeFile('./mock-tickets.json', JSON.stringify(tickets), function (err) {
+	fs.writeFile('./test/mocks/tickets.json', JSON.stringify(tickets), function (err) {
 		if (err) return console.log(err);
 		console.log('Ticket mocks created');
 		return true;
