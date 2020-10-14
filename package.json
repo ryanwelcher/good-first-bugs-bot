@@ -17,18 +17,21 @@
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^24.1.0",
     "eslint-plugin-jsdoc": "^22.2.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.20.6",
     "eslint-plugin-react-hooks": "^2.5.0",
+    "jest": "^26.5.3",
     "prettier": "^2.1.2"
   },
   "scripts": {
 	"start": "node app.js",
 	"generate:tickets": "node ./test/generate-tickets.js",
 	"generate:mentions": "node ./test/generate-mentions.js",
-	"generate:mocks": "npm run generate:tickets && npm run generate:mentions"
+	"generate:mocks": "npm run generate:tickets && npm run generate:mentions",
+    "test": "jest"
   },
   "author": "Ryan Welcher",
   "license": "ISC"
