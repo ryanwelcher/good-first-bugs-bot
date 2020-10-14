@@ -1,9 +1,9 @@
 /**
- *
+ * Internal dependencies
  */
-const { generateMessage, generateHashTags, hashTags } = require('./messages');
+const { generateTweetStatus, generateHashTags, hashTags } = require('./tweet-status');
 
-describe('generateMessage', () => {
+describe('generateTweetStatus', () => {
 	it('generates tweet message for Gutenberg ticket', () => {
 		const ticket = {
 			issue: '12345',
@@ -12,7 +12,7 @@ describe('generateMessage', () => {
 			url: 'https://www.example.com/test-ticket',
 		};
 		const hashtags = hashTags[ticket.type].join(' ');
-		expect(generateMessage(ticket)).toBe(
+		expect(generateTweetStatus(ticket)).toBe(
 			`#${ticket.issue}: ${ticket.title} ${ticket.url} ${hashtags}`,
 		);
 	});
@@ -24,7 +24,7 @@ describe('generateMessage', () => {
 			url: 'https://www.example.com/test-ticket',
 		};
 		const hashtags = hashTags[ticket.type].join(' ');
-		expect(generateMessage(ticket)).toBe(
+		expect(generateTweetStatus(ticket)).toBe(
 			`#${ticket.issue}: ${ticket.title} ${ticket.url} ${hashtags}`,
 		);
 	});

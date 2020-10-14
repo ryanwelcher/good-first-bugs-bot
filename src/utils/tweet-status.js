@@ -29,7 +29,7 @@ function getHashTags(ticketType) {
  * @param {string} [baseMessage] Optional. The base message to prepend to the generated message
  * @returns {string} The message for the tweet.
  */
-function generateMessage(ticket, baseMessage = '') {
+function generateTweetStatus(ticket, baseMessage = '') {
 	const { issue, title, type, url } = ticket;
 	const hashtags = getHashTags(type);
 	let message = `${baseMessage}#${issue}: ${title} ${url} ${hashtags}`;
@@ -41,6 +41,6 @@ function generateMessage(ticket, baseMessage = '') {
 
 module.exports = {
 	getHashTags,
-	generateMessage,
+	generateTweetStatus,
 	hashTags,
 };

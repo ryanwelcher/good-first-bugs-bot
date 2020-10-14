@@ -9,7 +9,7 @@ const TwitterPackage = require('twitter');
 /**
  * Internal dependencies
  */
-const { generateMessage } = require('./utils/messages');
+const { generateTweetStatus } = require('./utils/tweet-status');
 
 const Twitter = new TwitterPackage({
 	consumer_key: process.env.TWITTER_CONSUMER_KEY,
@@ -27,11 +27,11 @@ module.exports = function sendATweet(tweetsToSend) {
 	const tweetKeys = Object.keys(tweetsToSend);
 	if (tweetKeys.length !== 0) {
 		const index = tweetKeys[Math.floor(Math.random() * tweetKeys.length)];
-		const message = generateMessage(tweetsToSend[index]);
+		const content = generateTweetStatus(tweetsToSend[index]);
 		if (process.env.NODE_ENV === 'production') {
-			Twitter.post('statuses/update', { status: message }, function (err) {
-				if (message) {
-					console.log(`Tweeted: ${message}`);
+			Twitter.post('statuses/update', { status: content }, function (err) {
+				if (content) {
+					console.log(`Tweeted: ${content}`);
 					console.log('**********************');
 				}
 				if (err) {
@@ -39,7 +39,7 @@ module.exports = function sendATweet(tweetsToSend) {
 				}
 			});
 		} else {
-			console.log(`Dev: Tweeted: ${message}`);
+			console.log(`Dev: Tweeted: ${content}`);
 		}
 
 		delete tweetsToSend[index];
