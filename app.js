@@ -12,6 +12,9 @@ const Twitter = new TwitterPackage({
 	access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
 });
 
+const { generateTweetStatus } = require('./src/utils/tweet-status');
+const { selectTicket } = require('./src/utils/select-ticket');
+
 const getTickets = require('./src/getTickets');
 const sendATweet = require('./src/sendATweet');
 const getLatestMentions = require('./src/getLatestMentions');
@@ -29,7 +32,11 @@ const { STARTING_TWEET } = process.env;
 	if (firstRun) {
 		mentions = await getLatestMentions(STARTING_TWEET);
 		console.log('Auto tweeting on first run');
-		sendATweet(tweetsToSend);
+		const { ticket, index } = selectTicket(tweetsToSend);
+		const status = generateTweetStatus(ticket);
+		sendATweet(status);
+		delete tweetsToSend[index];
+		console.log(`There are ${Object.keys(tweetsToSend).length} tweets still in the queue`);
 		firstRun = false;
 	}
 	setInterval(async () => {
@@ -38,7 +45,13 @@ const { STARTING_TWEET } = process.env;
 		}
 	}, HALF_HOUR);
 	setInterval(() => {
-		sendATweet(tweetsToSend);
+		if (Object.keys(tweetsToSend).length) {
+			const { ticket, index } = selectTicket(tweetsToSend);
+			const status = generateTweetStatus(ticket);
+			sendATweet(status);
+			delete tweetsToSend[index];
+			console.log(`There are ${Object.keys(tweetsToSend).length} tweets still in the queue`);
+		}
 	}, FIFTEEN_MINUTES);
 
 	setInterval(async () => {
