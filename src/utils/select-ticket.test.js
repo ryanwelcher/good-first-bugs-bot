@@ -1,5 +1,5 @@
 const { selectTicket } = require('./select-ticket');
-const tickets = require('../../test/mock-tickets.json');
+const tickets = require('../../test/mocks/tickets.json');
 
 describe('selectTickets', () => {
 	it('selects a random ticket', () => {
