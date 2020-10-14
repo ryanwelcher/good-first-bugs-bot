@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-const { generateTweetStatus, generateHashTags, hashTags } = require('./tweet-status');
+const { generateTweetStatus, getHashTags, hashTags } = require('./tweet-status');
 
 describe('generateTweetStatus', () => {
 	it('generates tweet message for Gutenberg ticket', () => {
@@ -30,11 +30,11 @@ describe('generateTweetStatus', () => {
 	});
 });
 
-describe('generateHashTags', () => {
+describe('getHashTags', () => {
 	it('generates Gutenberg hash tags', () => {
-		expect(generateHashTags('gb')).toBe('#GoodFirstBug #Gutenberg');
+		expect(getHashTags('gb')).toBe('#GoodFirstBug #Gutenberg');
 	});
 	it('generates WordPress trac hash tags', () => {
-		expect(generateHashTags('trac')).toBe('#GoodFirstBug #WordPress');
+		expect(getHashTags('trac')).toBe('#GoodFirstBug #WordPress');
 	});
 });

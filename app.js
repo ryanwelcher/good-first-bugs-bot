@@ -2,6 +2,9 @@
  * Created by ryanwelcher on 2017-04-07.
  */
 
+const { generateTweetStatus } = require('./src/utils/tweet-status');
+const { selectTicket } = require('./src/utils/select-ticket');
+
 const getTickets = require('./src/getTickets');
 const sendATweet = require('./src/sendATweet');
 
@@ -13,7 +16,11 @@ const FIFTEEN_MINUTES = HALF_HOUR / 2;
 	let tweetsToSend = await getTickets();
 	if (firstRun) {
 		console.log('Auto tweeting on first run');
-		sendATweet(tweetsToSend);
+		const { ticket, index } = selectTicket(tweetsToSend);
+		const status = generateTweetStatus(ticket);
+		sendATweet(status);
+		delete tweetsToSend[index];
+		console.log(`There are ${Object.keys(tweetsToSend).length} tweets still in the queue`);
 		firstRun = false;
 	}
 	setInterval(async () => {
@@ -22,6 +29,12 @@ const FIFTEEN_MINUTES = HALF_HOUR / 2;
 		}
 	}, HALF_HOUR);
 	setInterval(() => {
-		sendATweet(tweetsToSend);
+		if (Object.keys(tweetsToSend).length) {
+			const { ticket, index } = selectTicket(tweetsToSend);
+			const status = generateTweetStatus(ticket);
+			sendATweet(status);
+			delete tweetsToSend[index];
+			console.log(`There are ${Object.keys(tweetsToSend).length} tweets still in the queue`);
+		}
 	}, FIFTEEN_MINUTES);
 })();
