@@ -1,6 +1,6 @@
 const getGutenbergTickets = require('./github');
 const getTracTickets = require('./trac');
-const mockTickets = require('../test/mocks/mock-tickets.json');
+const mockTickets = require('../test/mocks/tickets.json');
 
 module.exports = async function getTickets() {
 	const tweetsToSend = {};
