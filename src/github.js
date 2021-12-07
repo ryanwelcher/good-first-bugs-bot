@@ -6,8 +6,7 @@ module.exports = async function getGutenbergTickets() {
 		const request = await octokit.request('GET /repos/{owner}/{repo}/issues', {
 			owner: 'WordPress',
 			repo: 'gutenberg',
-			label: 'Good First Issue',
-			state: 'open',
+			labels: 'Good First Issue',
 			per_page: 100,
 		});
 		const { data } = request;
