@@ -27,9 +27,11 @@
     "prettier": "^2.1.2"
   },
   "scripts": {
-    "start": "node app.js",
-    "test": "jest",
-    "test:generate-ticket-mocks": "node ./test/generate-ticket-mocks.js"
+	"start": "node app.js",
+	"generate:tickets": "node ./test/generate-tickets.js",
+	"generate:mentions": "node ./test/generate-mentions.js",
+	"generate:mocks": "npm run generate:tickets && npm run generate:mentions",
+    "test": "jest"
   },
   "author": "Ryan Welcher",
   "license": "ISC"
