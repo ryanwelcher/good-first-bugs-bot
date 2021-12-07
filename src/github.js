@@ -7,7 +7,6 @@ module.exports = async function getGutenbergTickets() {
 			owner: 'WordPress',
 			repo: 'gutenberg',
 			labels: 'Good First Issue',
-			state: 'open',
 			per_page: 100,
 		});
 		const { data } = request;
