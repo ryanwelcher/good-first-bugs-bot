@@ -2,11 +2,12 @@
  * Created by ryanwelcher on 2017-04-07.
  */
 
-const { generateTweetStatus } = require('./src/utils/tweet-status');
-const { selectTicket } = require('./src/utils/select-ticket');
+import { generateTweetStatus } from './utils/tweet-status.js';
+// const { generateTweetStatus } = require('./utils/tweet-status');
+const { selectTicket } = require('./utils/select-ticket');
 
-const getTickets = require('./src/getTickets');
-const sendATweet = require('./src/sendATweet');
+const getTickets = require('./getTickets');
+const sendATweet = require('./sendATweet');
 
 let firstRun = true;
 const HALF_HOUR = 30 * 60 * 1000;

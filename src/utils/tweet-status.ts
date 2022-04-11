@@ -6,16 +6,19 @@ const hashTags = {
 	trac: ['#GoodFirstBug', '#WordPress'],
 };
 
+type TicketType = 'gb' | 'trac';
 /**
  * Gets the list of hash tags for the type of ticket
  *
- * @param {string} ticketType The ticket type. Either `gb` or `trac`.
- * @returns {string} The list of hash tags.
+ * @param ticketType
  */
-function getHashTags(ticketType) {
+function getHashTags(ticketType: TicketType) {
 	return hashTags[ticketType].join(' ');
 }
 
+export type Ticket = {
+	[k: string]: string;
+};
 /**
  * Generate the tweet content.
  *
@@ -29,7 +32,7 @@ function getHashTags(ticketType) {
  * @param {string} [baseMessage] Optional. The base message to prepend to the generated message
  * @returns {string} The message for the tweet.
  */
-function generateTweetStatus(ticket, baseMessage = '') {
+function generateTweetStatus(ticket: Ticket, baseMessage: string = '') {
 	const { issue, title, type, url } = ticket;
 	const hashtags = getHashTags(type);
 	let message = `${baseMessage}#${issue}: ${title} ${url} ${hashtags}`;
