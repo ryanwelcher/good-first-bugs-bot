@@ -1,0 +1,15 @@
+org: ryanwelcher
+app: good-first-bugs
+service: good-first-bugs
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+functions:
+  hello:
+    handler: build/handler.hello
+  test:
+    handler: build.handler.test
