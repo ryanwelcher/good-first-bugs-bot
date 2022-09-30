@@ -1,36 +1,21 @@
 {
-  "name": "good-first-bugs-bot",
+  "name": "good-first-bugs",
   "version": "1.0.0",
-  "description": "A Twitter bot that tweets out tickets flagged as Good First Bugs",
-  "main": "app.js",
-  "dependencies": {
-    "@octokit/core": "^3.1.2",
-    "dotenv": "^8.2.0",
-    "rss-parser": "^3.9.0",
-    "twitter": "^1.7.1"
-  },
-  "devDependencies": {
-    "@10up/eslint-config": "^2.1.1",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb": "^18.2.0",
-    "eslint-config-airbnb-base": "^14.2.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-jest": "^24.1.0",
-    "eslint-plugin-jsdoc": "^22.2.0",
-    "eslint-plugin-jsx-a11y": "^6.3.1",
-    "eslint-plugin-prettier": "^3.1.4",
-    "eslint-plugin-react": "^7.20.6",
-    "eslint-plugin-react-hooks": "^2.5.0",
-    "jest": "^26.5.3",
-    "prettier": "^2.1.2"
-  },
+  "description": "<!-- title: 'AWS NodeJS Example' description: 'This template demonstrates how to deploy a NodeJS function running on AWS Lambda using the traditional Serverless Framework.' layout: Doc framework: v3 platform: AWS language: nodeJS priority: 1 authorLink: 'https://github.com/serverless' authorName: 'Serverless, inc.' authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4' -->",
+  "main": "handler.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "jest",
-    "test:generate-ticket-mocks": "node ./test/generate-ticket-mocks.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Ryan Welcher",
-  "license": "ISC"
+  "keywords": [],
+  "author": {
+    "name": "Ryan Welcher",
+    "email": "me@ryanwelcher.com"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.106",
+    "@types/node": "^18.7.23",
+    "prettier": "2.7.1",
+    "typescript": "^4.8.4"
+  }
 }

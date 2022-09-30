@@ -1,4 +1,13 @@
 # Created by .ignore support plugin (hsz.mobi)
-/node_modules
 .env
+# package directories
+node_modules
+jspm_packages
+
+# Serverless directories
+.serverless
+
+# other things
+build
 .vscode
+.DS_Store
