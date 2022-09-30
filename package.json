@@ -9,6 +9,7 @@
     "rss-parser": "^3.9.0",
     "twitter": "^1.7.1"
   },
+  "type": "module",
   "devDependencies": {
     "@10up/eslint-config": "^2.1.1",
     "babel-eslint": "^10.1.0",
@@ -28,7 +29,7 @@
     "typescript": "^4.6.3"
   },
   "scripts": {
-    "start": "node app.js",
+    "start": "node build/app.js",
     "test": "jest",
     "test:generate-ticket-mocks": "node ./test/generate-ticket-mocks.js",
     "tsc": "tsc",

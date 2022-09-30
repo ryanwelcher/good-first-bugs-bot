@@ -8,9 +8,11 @@ const hashTags = {
 /**
  * Gets the list of hash tags for the type of ticket
  *
- * @param ticketType
+ * @param ticketType The type of ticket
+ *
+ * @returns {string} The concatenated list of hashtags.
  */
-function getHashTags(ticketType) {
+export function getHashTags(ticketType) {
     return hashTags[ticketType].join(' ');
 }
 /**
@@ -18,15 +20,12 @@ function getHashTags(ticketType) {
  *
  * If the message is over 140 characters, the title is truncated.
  *
- * @param {object} ticket        The ticket object.
- * @param {string} ticket.issue  The issue number for the ticket.
- * @param {string} ticket.title  The title of the ticket returned from the API
- * @param {string} ticket.type   Type of ticket. Either `gb` or `trac`
- * @param {string} ticket.url    The URL of the ticket.
+ * @param {Ticket} ticket        The ticket object.
  * @param {string} [baseMessage] Optional. The base message to prepend to the generated message
+ *
  * @returns {string} The message for the tweet.
  */
-function generateTweetStatus(ticket, baseMessage = '') {
+export function generateTweetStatus(ticket, baseMessage = '') {
     const { issue, title, type, url } = ticket;
     const hashtags = getHashTags(type);
     let message = `${baseMessage}#${issue}: ${title} ${url} ${hashtags}`;
@@ -35,9 +34,3 @@ function generateTweetStatus(ticket, baseMessage = '') {
     }
     return message;
 }
-module.exports = {
-    getHashTags,
-    generateTweetStatus,
-    hashTags,
-};
-export {};
